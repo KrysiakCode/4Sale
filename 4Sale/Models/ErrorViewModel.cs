@@ -4,6 +4,8 @@ namespace _4Sale.Models
     {
         public string? RequestId { get; set; }
 
+        public bool Temp { get; set; }
+
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }
