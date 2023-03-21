@@ -8,5 +8,6 @@ namespace _4Sale.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
+        public ItemType Type { get; set; }
     }
 }

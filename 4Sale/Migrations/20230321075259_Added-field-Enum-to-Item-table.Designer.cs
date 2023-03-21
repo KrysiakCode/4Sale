@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _4Sale.Data;
 
@@ -10,9 +11,11 @@ using _4Sale.Data;
 namespace _4Sale.Migrations
 {
     [DbContext(typeof(_4SaleContext))]
-    partial class _4SaleContextModelSnapshot : ModelSnapshot
+    [Migration("20230321075259_Added-field-Enum-to-Item-table")]
+    partial class AddedfieldEnumtoItemtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

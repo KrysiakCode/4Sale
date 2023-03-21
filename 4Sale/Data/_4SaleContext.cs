@@ -15,5 +15,14 @@ namespace _4Sale.Data
         }
 
         public DbSet<_4Sale.Models.Item> Item { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Item>()
+                .Property(x => x.Type)
+                .HasConversion<int>();
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
