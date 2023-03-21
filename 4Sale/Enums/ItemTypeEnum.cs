@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace _4Sale.Enums
 {
-    public enum ItemType
+    public enum ItemTypeEnum
     {
         [Display(Name = "Torba podróżna")]
         TravelBag,
