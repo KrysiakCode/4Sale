@@ -16,10 +16,10 @@ namespace _4Sale.Data
 
         public DbSet<_4Sale.Models.Item> Item { get; set; } = default!;
         public DbSet<_4Sale.Models.Dictionary> Dictionary { get; set; } = default!;
+        public DbSet<_4Sale.Models.Invoice> Invoice { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<Dictionary>()
                 .Property(x => x.Category)
                 .HasConversion<int>();
