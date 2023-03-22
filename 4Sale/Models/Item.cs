@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using _4Sale.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace _4Sale.Models
 {

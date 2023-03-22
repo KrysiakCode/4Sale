@@ -8,23 +8,34 @@ using Microsoft.EntityFrameworkCore;
 using _4Sale.Data;
 using _4Sale.Enums;
 using _4Sale.Models;
+using _4Sale.ViewModels;
+using AutoMapper;
 
 namespace _4Sale.Controllers
 {
     public class ItemsController : Controller
     {
         private readonly _4SaleContext _context;
+        private readonly IMapper _mapper;
 
-        public ItemsController(_4SaleContext context)
+        public ItemsController(_4SaleContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Items
         public async Task<IActionResult> Index()
         {
-              return _context.Item != null ? 
-                          View(await _context.Item.ToListAsync()) :
+            List<ItemViewModel> itemVmList = new List<ItemViewModel>();
+            var itemList = await _context.Item.ToListAsync();
+            foreach (var item in itemList)
+            {
+                itemVmList.Add(_mapper.Map<ItemViewModel>(item));
+            }
+
+            return _context.Item != null ? 
+                          View(itemVmList) :
                           Problem("Entity set '_4SaleContext.Item'  is null.");
         }
 
