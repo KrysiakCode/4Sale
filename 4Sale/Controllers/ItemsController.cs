@@ -76,15 +76,16 @@ namespace _4Sale.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Color,ItemType")] Item item)
+        public async Task<IActionResult> Create([Bind("Id,Name,Color,ItemType")] ItemViewModel itemVM)
         {
             if (ModelState.IsValid)
             {
+                var item = _mapper.Map<Item>(itemVM);
                 _context.Add(item);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(item);
+            return View(itemVM);
         }
 
         // GET: Items/Edit/5
@@ -101,13 +102,15 @@ namespace _4Sale.Controllers
                 return NotFound();
             }
 
+            var itemViewModel = _mapper.Map<ItemViewModel>(item);
+
             var list = await _context.Dictionary.ToListAsync();
             var itemTypes = list.Where((x => x.Category == CategoryEnum.ItemType)).Select(x => x.Name);
             var itemColors = list.Where((x => x.Category == CategoryEnum.ItemColor)).Select(x => x.Name);
             ViewBag.ItemTypes = new SelectList(itemTypes);
             ViewBag.ItemColors = new SelectList(itemColors);
 
-            return View(item);
+            return View(itemViewModel);
         }
 
         // POST: Items/Edit/5
@@ -115,9 +118,9 @@ namespace _4Sale.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Color,ItemType")] Item item)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Color,ItemType")] ItemViewModel itemVM)
         {
-            if (id != item.Id)
+            if (id != itemVM.Id)
             {
                 return NotFound();
             }
@@ -126,12 +129,13 @@ namespace _4Sale.Controllers
             {
                 try
                 {
+                    var item = _mapper.Map<Item>(itemVM);
                     _context.Update(item);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ItemExists(item.Id))
+                    if (!ItemExists(itemVM.Id))
                     {
                         return NotFound();
                     }
@@ -142,7 +146,7 @@ namespace _4Sale.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(item);
+            return View(itemVM);
         }
 
         // GET: Items/Delete/5

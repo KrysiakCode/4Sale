@@ -9,6 +9,7 @@ namespace _4Sale
         public MappingProfile()
         {
             CreateMap<Item, ItemViewModel>();
+            CreateMap<ItemViewModel, Item>();
             CreateMap<Invoice, InvoiceViewModel>();
         }
     }
