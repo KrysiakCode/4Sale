@@ -52,8 +52,10 @@ namespace _4Sale.Controllers
             if (_context != null && _context.Dictionary != null)
             {
                 var list = await _context.Dictionary.ToListAsync();
-                var itemTypesName = list.Where((x => x.Category == CategoryEnum.ItemType)).Select(x => x.Name);
-                ViewBag.ItemTypes = new SelectList(itemTypesName);
+                var itemTypes = list.Where((x => x.Category == CategoryEnum.ItemType)).Select(x => x.Name);
+                var itemColors = list.Where((x => x.Category == CategoryEnum.ItemColor)).Select(x => x.Name);
+                ViewBag.ItemTypes = new SelectList(itemTypes);
+                ViewBag.ItemColors = new SelectList(itemColors);
             }
             return View();
         }
@@ -89,8 +91,10 @@ namespace _4Sale.Controllers
             }
 
             var list = await _context.Dictionary.ToListAsync();
-            var itemTypesName = list.Where((x => x.Category == CategoryEnum.ItemType)).Select(x => x.Name);
-            ViewBag.ItemTypes = new SelectList(itemTypesName);
+            var itemTypes = list.Where((x => x.Category == CategoryEnum.ItemType)).Select(x => x.Name);
+            var itemColors = list.Where((x => x.Category == CategoryEnum.ItemColor)).Select(x => x.Name);
+            ViewBag.ItemTypes = new SelectList(itemTypes);
+            ViewBag.ItemColors = new SelectList(itemColors);
 
             return View(item);
         }
