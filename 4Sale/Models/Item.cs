@@ -9,5 +9,7 @@ namespace _4Sale.Models
         public string Name { get; set; }
         public string Color { get; set; }
         public string ItemType { get; set; }
+
+        public InvoiceContent InvoiceContent { get; set; }
     }
 }

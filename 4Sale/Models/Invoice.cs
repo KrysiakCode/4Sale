@@ -33,4 +33,6 @@ public class Invoice
     [Column(TypeName = "decimal(5,2)")]
     public float TotalNet { get; set; }
 
+    public List<InvoiceContent> InvoiceElements { get; set; } = new List<InvoiceContent>();
+
 }
