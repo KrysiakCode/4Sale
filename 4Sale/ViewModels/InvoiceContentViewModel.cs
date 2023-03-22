@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using _4Sale.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-namespace _4Sale.Models
+namespace _4Sale.ViewModels
 {
-    public class InvoiceContent
+    public class InvoiceContentViewModel
     {
         [Required]
         public int Id { get; set; }
@@ -24,15 +25,5 @@ namespace _4Sale.Models
         [Required]
         [Column(TypeName = "decimal(5,2)")]
         public float Net { get; set; }
-
-        [Required]
-        public Invoice Invoice { get; set; }
-
-        public int InvoiceId { get; set; }
-
-        [Required]
-        public Item Item { get; set; }
-        [Required]
-        public int ItemId { get; set; }
     }
 }

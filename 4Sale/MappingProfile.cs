@@ -11,6 +11,7 @@ namespace _4Sale
             CreateMap<Item, ItemViewModel>();
             CreateMap<ItemViewModel, Item>();
             CreateMap<Invoice, InvoiceViewModel>();
+            CreateMap<InvoiceViewModel, Invoice>();
         }
     }
 }
