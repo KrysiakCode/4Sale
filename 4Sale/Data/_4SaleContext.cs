@@ -19,9 +19,6 @@ namespace _4Sale.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Item>()
-                .Property(x => x.Type)
-                .HasConversion<int>();
 
             modelBuilder.Entity<Dictionary>()
                 .Property(x => x.Category)

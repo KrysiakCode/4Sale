@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using _4Sale.Data;
+using _4Sale.Enums;
 using _4Sale.Models;
 
 namespace _4Sale.Controllers
@@ -46,8 +47,14 @@ namespace _4Sale.Controllers
         }
 
         // GET: Items/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            if (_context != null && _context.Dictionary != null)
+            {
+                var list = await _context.Dictionary.ToListAsync();
+                var itemTypesName = list.Where((x => x.Category == CategoryEnum.ItemType)).Select(x => x.Name);
+                ViewBag.ItemTypes = new SelectList(itemTypesName);
+            }
             return View();
         }
 
@@ -56,7 +63,7 @@ namespace _4Sale.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Color,Type")] Item item)
+        public async Task<IActionResult> Create([Bind("Id,Name,Color,ItemType")] Item item)
         {
             if (ModelState.IsValid)
             {
@@ -80,6 +87,11 @@ namespace _4Sale.Controllers
             {
                 return NotFound();
             }
+
+            var list = await _context.Dictionary.ToListAsync();
+            var itemTypesName = list.Where((x => x.Category == CategoryEnum.ItemType)).Select(x => x.Name);
+            ViewBag.ItemTypes = new SelectList(itemTypesName);
+
             return View(item);
         }
 
@@ -88,7 +100,7 @@ namespace _4Sale.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Color,Type")] Item item)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Color,ItemType")] Item item)
         {
             if (id != item.Id)
             {
