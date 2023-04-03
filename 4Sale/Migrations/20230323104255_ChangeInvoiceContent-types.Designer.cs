@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _4Sale.Data;
 
@@ -11,9 +12,11 @@ using _4Sale.Data;
 namespace _4Sale.Migrations
 {
     [DbContext(typeof(_4SaleContext))]
-    partial class _4SaleContextModelSnapshot : ModelSnapshot
+    [Migration("20230323104255_ChangeInvoiceContent-types")]
+    partial class ChangeInvoiceContenttypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,7 +108,8 @@ namespace _4Sale.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("ItemId")
+                        .IsUnique();
 
                     b.ToTable("InvoiceContent");
                 });

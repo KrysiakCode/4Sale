@@ -1,4 +1,4 @@
-﻿@model _4Sale.Models.InvoiceContent
+﻿@model _4Sale.ViewModels.InvoiceContentViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -7,11 +7,18 @@
 <h1>Create</h1>
 
 <h4>InvoiceContent</h4>
+
+<p>
+    <label>@ViewBag.InvoiceNo</label>
+</p>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="InvoiceId" class="form-control" hidden/>
+            
             <div class="form-group">
                 <label asp-for="Quantity" class="control-label"></label>
                 <input asp-for="Quantity" class="form-control" />
@@ -32,14 +39,12 @@
                 <input asp-for="Net" class="form-control" />
                 <span asp-validation-for="Net" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="InvoiceId" class="control-label"></label>
-                <select asp-for="InvoiceId" class ="form-control" asp-items="ViewBag.InvoiceId"></select>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="ItemId" class="control-label"></label>
                 <select asp-for="ItemId" class ="form-control" asp-items="ViewBag.ItemId"></select>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

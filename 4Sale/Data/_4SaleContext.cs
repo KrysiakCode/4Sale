@@ -30,6 +30,11 @@ namespace _4Sale.Data
                 .WithOne(ic => ic.Invoice)
                 .HasForeignKey(ic => ic.InvoiceId);
 
+            modelBuilder.Entity<InvoiceContent>()
+                .HasIndex("InvoiceId").IsUnique(false);
+            modelBuilder.Entity<InvoiceContent>()
+                .HasIndex("ItemId").IsUnique(false);
+
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.InvoiceContent)
                 .WithOne(ic => ic.Item)

@@ -7,22 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using _4Sale.Data;
 using _4Sale.Models;
+using _4Sale.ViewModels;
+using AutoMapper;
 
 namespace _4Sale.Controllers
 {
     public class InvoiceContentsController : Controller
     {
         private readonly _4SaleContext _context;
+        private readonly IMapper _mapper;
 
-        public InvoiceContentsController(_4SaleContext context)
+        public InvoiceContentsController(_4SaleContext context, IMapper  mapper )
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: InvoiceContents
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            var _4SaleContext = _context.InvoiceContent.Include(i => i.Invoice).Include(i => i.Item);
+            ViewData["InvoiceId"] = id;
+            var invoiceNo = await _context.Invoice.FindAsync(id);
+            ViewData["InvoiceNo"] = invoiceNo.InvoiceNo;
+            var _4SaleContext = _context.InvoiceContent
+                .Where(ic => ic.InvoiceId == id)
+                .Include(i => i.Invoice)
+                .Include(i => i.Item);
             return View(await _4SaleContext.ToListAsync());
         }
 
@@ -47,11 +57,15 @@ namespace _4Sale.Controllers
         }
 
         // GET: InvoiceContents/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int? id)
         {
-            ViewData["InvoiceId"] = new SelectList(_context.Invoice, "Id", "InvoiceNo");
+            var invoiceNo = await _context.Invoice.FindAsync(id);
+            ViewData["InvoiceNo"] = invoiceNo.InvoiceNo;
+
             ViewData["ItemId"] = new SelectList(_context.Item, "Id", "Id");
-            return View();
+            var cc = new InvoiceContentViewModel();
+            cc.InvoiceId = (int)id;
+            return View(cc);
         }
 
         // POST: InvoiceContents/Create
@@ -59,17 +73,19 @@ namespace _4Sale.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Quantity,Gross,Vat,Net,InvoiceId,ItemId")] InvoiceContent invoiceContent)
+        public async Task<IActionResult> Create([Bind("Quantity,Gross,Vat,Net,InvoiceId,ItemId")] InvoiceContentViewModel invoiceContentVM)
         {
             if (ModelState.IsValid)
             {
+                var invoiceContent = _mapper.Map<InvoiceContent>(invoiceContentVM);
                 _context.Add(invoiceContent);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { id = invoiceContent.InvoiceId });
             }
-            ViewData["InvoiceId"] = new SelectList(_context.Invoice, "Id", "InvoiceNo", invoiceContent.InvoiceId);
-            ViewData["ItemId"] = new SelectList(_context.Item, "Id", "Id", invoiceContent.ItemId);
-            return View(invoiceContent);
+            
+            ViewData["InvoiceId"] = new SelectList(_context.Invoice, "Id", "Id", invoiceContentVM.InvoiceId);
+            ViewData["ItemId"] = new SelectList(_context.Item, "Id", "Id", invoiceContentVM.ItemId);
+            return View(invoiceContentVM);
         }
 
         // GET: InvoiceContents/Edit/5

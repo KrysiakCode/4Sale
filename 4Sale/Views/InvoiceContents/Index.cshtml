@@ -7,8 +7,13 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-route-id=@ViewBag.InvoiceId>Create New</a>
 </p>
+
+<p>
+    <label>@ViewBag.InvoiceNo</label>
+</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -49,7 +54,7 @@
                 @Html.DisplayFor(modelItem => item.Net)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Invoice.InvoiceNo)
+                @Html.DisplayFor(modelItem => item.Invoice.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Item.Id)

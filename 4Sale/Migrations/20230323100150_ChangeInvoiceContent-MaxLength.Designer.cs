@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _4Sale.Data;
 
@@ -11,9 +12,11 @@ using _4Sale.Data;
 namespace _4Sale.Migrations
 {
     [DbContext(typeof(_4SaleContext))]
-    partial class _4SaleContextModelSnapshot : ModelSnapshot
+    [Migration("20230323100150_ChangeInvoiceContent-MaxLength")]
+    partial class ChangeInvoiceContentMaxLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,8 +86,8 @@ namespace _4Sale.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Gross")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Gross")
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<int>("InvoiceId")
                         .HasColumnType("int");
@@ -92,20 +95,21 @@ namespace _4Sale.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Net")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Net")
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("Vat")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Vat")
+                        .HasColumnType("decimal(5,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("InvoiceId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("ItemId")
+                        .IsUnique();
 
                     b.ToTable("InvoiceContent");
                 });
