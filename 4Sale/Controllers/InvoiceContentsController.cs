@@ -26,14 +26,21 @@ namespace _4Sale.Controllers
         // GET: InvoiceContents
         public async Task<IActionResult> Index(int? id)
         {
-            ViewData["InvoiceId"] = id;
-            var invoiceNo = await _context.Invoice.FindAsync(id);
-            ViewData["InvoiceNo"] = invoiceNo.InvoiceNo;
-            var _4SaleContext = _context.InvoiceContent
-                .Where(ic => ic.InvoiceId == id)
-                .Include(i => i.Invoice)
-                .Include(i => i.Item);
-            return View(await _4SaleContext.ToListAsync());
+            if (id != null)
+            {
+                ViewData["InvoiceId"] = id;
+                var invoiceNo = await _context.Invoice.FindAsync(id);
+                ViewData["InvoiceNo"] = invoiceNo.InvoiceNo;
+                var _4SaleContext = _context.InvoiceContent
+                    .Where(ic => ic.InvoiceId == id)
+                    .Include(i => i.Invoice)
+                    .Include(i => i.Item);
+                return View(await _4SaleContext.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("Index", "Invoices");
+            }
         }
 
         // GET: InvoiceContents/Details/5
@@ -53,6 +60,9 @@ namespace _4Sale.Controllers
                 return NotFound();
             }
 
+            //Przerobić na ViewModel - wszędzie
+
+            ViewData["InvoiceId"] = invoiceContent.InvoiceId;
             return View(invoiceContent);
         }
 
@@ -61,8 +71,7 @@ namespace _4Sale.Controllers
         {
             var invoiceNo = await _context.Invoice.FindAsync(id);
             ViewData["InvoiceNo"] = invoiceNo.InvoiceNo;
-
-            ViewData["ItemId"] = new SelectList(_context.Item, "Id", "Id");
+            ViewData["ItemId"] = new SelectList(_context.Item, "Id", "Name");
             var cc = new InvoiceContentViewModel();
             cc.InvoiceId = (int)id;
             return View(cc);
@@ -101,9 +110,12 @@ namespace _4Sale.Controllers
             {
                 return NotFound();
             }
-            ViewData["InvoiceId"] = new SelectList(_context.Invoice, "Id", "InvoiceNo", invoiceContent.InvoiceId);
-            ViewData["ItemId"] = new SelectList(_context.Item, "Id", "Id", invoiceContent.ItemId);
-            return View(invoiceContent);
+
+            var icVM = _mapper.Map<InvoiceContentViewModel>(invoiceContent);
+
+            ViewData["Invoice"] = new SelectList(_context.Invoice, "Id", "InvoiceNo", icVM.InvoiceId);
+            ViewData["Item"] = new SelectList(_context.Item, "Id", "Name", icVM.ItemId);
+            return View(icVM);
         }
 
         // POST: InvoiceContents/Edit/5
@@ -111,23 +123,24 @@ namespace _4Sale.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Quantity,Gross,Vat,Net,InvoiceId,ItemId")] InvoiceContent invoiceContent)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Quantity,Gross,Vat,Net,InvoiceId,ItemId")] InvoiceContentViewModel invoiceContentVM)
         {
-            if (id != invoiceContent.Id)
+            if (id != invoiceContentVM.Id)
             {
                 return NotFound();
             }
-
+            var ic = _mapper.Map<InvoiceContent>(invoiceContentVM);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(invoiceContent);
+                    
+                    _context.Update(ic);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InvoiceContentExists(invoiceContent.Id))
+                    if (!InvoiceContentExists(ic.Id))
                     {
                         return NotFound();
                     }
@@ -138,9 +151,9 @@ namespace _4Sale.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InvoiceId"] = new SelectList(_context.Invoice, "Id", "InvoiceNo", invoiceContent.InvoiceId);
-            ViewData["ItemId"] = new SelectList(_context.Item, "Id", "Id", invoiceContent.ItemId);
-            return View(invoiceContent);
+            ViewData["Invoice"] = new SelectList(_context.Invoice, "Id", "InvoiceNo", invoiceContentVM.InvoiceId);
+            ViewData["Item"] = new SelectList(_context.Item, "Id", "Name", invoiceContentVM.ItemId);
+            return View(invoiceContentVM);
         }
 
         // GET: InvoiceContents/Delete/5

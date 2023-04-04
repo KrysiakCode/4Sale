@@ -1,4 +1,4 @@
-﻿@model _4Sale.Models.InvoiceContent
+﻿@model _4Sale.ViewModels.InvoiceContentViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input class="form-control" hidden asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Quantity" class="control-label"></label>
                 <input asp-for="Quantity" class="form-control" />
@@ -35,12 +35,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="InvoiceId" class="control-label"></label>
-                <select asp-for="InvoiceId" class="form-control" asp-items="ViewBag.InvoiceId"></select>
+                <select asp-for="InvoiceId" class="form-control" asp-items="ViewBag.Invoice"></select>
                 <span asp-validation-for="InvoiceId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ItemId" class="control-label"></label>
-                <select asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId"></select>
+                <select asp-for="ItemId" class="form-control" asp-items="ViewBag.Item"></select>
                 <span asp-validation-for="ItemId" class="text-danger"></span>
             </div>
             <div class="form-group">
