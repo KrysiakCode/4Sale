@@ -115,6 +115,7 @@ namespace _4Sale.Controllers
 
             ViewData["Invoice"] = new SelectList(_context.Invoice, "Id", "InvoiceNo", icVM.InvoiceId);
             ViewData["Item"] = new SelectList(_context.Item, "Id", "Name", icVM.ItemId);
+            ViewData["InvoiceId"] = icVM.InvoiceId;
             return View(icVM);
         }
 
@@ -149,7 +150,7 @@ namespace _4Sale.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { id = invoiceContentVM.InvoiceId });
             }
             ViewData["Invoice"] = new SelectList(_context.Invoice, "Id", "InvoiceNo", invoiceContentVM.InvoiceId);
             ViewData["Item"] = new SelectList(_context.Item, "Id", "Name", invoiceContentVM.ItemId);
@@ -172,14 +173,14 @@ namespace _4Sale.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["InvoiceId"] = invoiceContent.InvoiceId;
             return View(invoiceContent);
         }
 
         // POST: InvoiceContents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, [Bind("Invoice, InvoiceId")] InvoiceContent ic)
         {
             if (_context.InvoiceContent == null)
             {
@@ -192,7 +193,7 @@ namespace _4Sale.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", new { id = ic.InvoiceId });
         }
 
         private bool InvoiceContentExists(int id)
